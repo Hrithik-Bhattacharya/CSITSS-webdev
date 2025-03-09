@@ -1,4 +1,5 @@
 import '../styles/globals.css'
+import { useState } from 'react'
 
 import { MantineProvider, MantineThemeOverride } from '@mantine/core'
 
@@ -6,16 +7,43 @@ import type { AppProps } from 'next/app'
 import WrapApp from '../components/NavBar'
 import { NextSeo } from 'next-seo'
 
+//defining custom color themes
+const customColors = {
+  customPrimary: [
+    '#F0F8FF', //lightest shade
+    'BDF8FF',
+    '#3282B8',
+    '#0F4C75',
+    '#1B262C', //darkest shade
+    ],
+}
 
-const theme: MantineThemeOverride = {
+const light_theme: MantineThemeOverride = {
   colorScheme: 'light',
-  primaryColor: 'indigo',
+  primaryColor: 'customPrimary',
+  colors: customColors
+  fontFamily: 'Verdana, sans-serif',
+  fontFamilyMonospace: 'Monaco, Courier, monospace',
+  headings: { fontFamily: 'Greycliff CF, sans-serif' },
+}
+const dark_theme: MantineThemeOverride = {
+  colorScheme: 'dark',
+  primaryColor: 'customPrimary',
+  colors: customColors
   fontFamily: 'Verdana, sans-serif',
   fontFamilyMonospace: 'Monaco, Courier, monospace',
   headings: { fontFamily: 'Greycliff CF, sans-serif' },
 }
 
+
+
+
 function MyApp({ Component, pageProps }: AppProps) {
+  const [theme, setTheme] = useState(lightTheme)
+  const toggleTheme = () => {
+    setTheme((prevTheme) => (prevTheme.colorScheme === 'light' ? dark_theme : light_theme))
+  }
+
   return (
     <MantineProvider
       theme={theme}
@@ -45,6 +73,21 @@ function MyApp({ Component, pageProps }: AppProps) {
             ],
           }}
         />
+
+       <button
+          onClick={toggleTheme}
+          style={{
+            padding: '10px',
+            backgroundColor: 'lightgrey',
+            position: 'fixed',
+            top: '10px',
+            left: '10px',
+            zIndex: 1000,
+          }}
+        >
+          Toggle Theme
+        </button>
+
         <Component {...pageProps} />
         
         <div id="recaptcha-container" />
